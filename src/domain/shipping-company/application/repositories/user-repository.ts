@@ -1,6 +1,6 @@
-import { Admin } from '../../enterprise/entities/admin'
+import { Administrator } from '../../enterprise/entities/administrator'
 import { Courier } from '../../enterprise/entities/courier'
 
 export abstract class UserRepository {
-  abstract findByCpf(cpf: string): Promise<Admin | Courier>
+  abstract findByCpf(cpf: string): Promise<Administrator | Courier | null>
 }

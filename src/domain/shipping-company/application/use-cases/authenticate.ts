@@ -1,14 +1,21 @@
-import { Admin } from '../../enterprise/entities/admin'
+import { Either, left, right } from '@/core/errors/either'
 import { Courier } from '../../enterprise/entities/courier'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { UserRepository } from '../repositories/user-repository'
+import { WrongCredentialsError } from './errors/wrong-credentials-error'
+import { Administrator } from '../../enterprise/entities/administrator'
 
 interface AuthenticateUseCaseRequest {
   cpf: string
   password: string
 }
 
-type AuthenticateUseCaseResponse = Admin | Courier
+type AuthenticateUseCaseResponse = Either<
+  WrongCredentialsError,
+  {
+    user: Administrator | Courier
+  }
+>
 
 export class AuthenticateUseCase {
   constructor(
@@ -23,15 +30,20 @@ export class AuthenticateUseCase {
     const user = await this.userRepository.findByCpf(cpf)
 
     if (!user) {
-      throw new Error('CPF or password are invalid')
+      return left(new WrongCredentialsError())
     }
 
-    const isPasswordValid = this.hashComparer.compare(password, user.password)
+    const isPasswordValid = await this.hashComparer.compare(
+      password,
+      user.password,
+    )
 
     if (!isPasswordValid) {
-      throw new Error('CPF or password are invalid')
+      return left(new WrongCredentialsError())
     }
 
-    return user
+    return right({
+      user,
+    })
   }
 }

@@ -5,7 +5,7 @@ interface CpfProps {
 }
 
 export class Cpf extends ValueObject<CpfProps> {
-  get value() {
+  public toString() {
     return this.props.value
   }
 
@@ -14,9 +14,7 @@ export class Cpf extends ValueObject<CpfProps> {
       throw new Error('Invalid CPF')
     }
 
-    const cpf = new Cpf(props)
-
-    return cpf
+    return new Cpf(props)
   }
 
   /**

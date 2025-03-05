@@ -2,7 +2,7 @@ import { Optional } from '@/core/types/optional'
 import { Worker, WorkerProps } from './worker'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
-interface CourierProps extends WorkerProps {}
+export interface CourierProps extends WorkerProps {}
 
 export class Courier extends Worker<CourierProps> {
   public getRole(): 'admin' | 'courier' {
