@@ -1,4 +1,4 @@
-import { Entity } from 'src/core/entities/entity'
+import { Entity } from '@/core/entities/entity'
 import { Cpf } from './value-objects/cpf'
 
 export interface WorkerProps {

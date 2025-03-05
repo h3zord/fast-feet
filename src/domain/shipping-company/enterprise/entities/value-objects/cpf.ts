@@ -1,4 +1,4 @@
-import { ValueObject } from 'src/core/entities/value-object'
+import { ValueObject } from '@/core/entities/value-object'
 
 interface CpfProps {
   value: string

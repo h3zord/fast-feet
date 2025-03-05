@@ -1,6 +1,6 @@
-import { Optional } from 'src/core/types/optional'
+import { Optional } from '@/core/types/optional'
 import { Worker, WorkerProps } from './worker'
-import { UniqueEntityId } from 'src/core/entities/unique-entity-id'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
 interface CourierProps extends WorkerProps {}
 
