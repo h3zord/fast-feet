@@ -43,8 +43,6 @@ describe('Authenticate use case', () => {
       password: '000000',
     })
 
-    console.log(result)
-
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(WrongCredentialsError)
   })
