@@ -5,17 +5,24 @@ import { AuthenticateUseCase } from './authenticate'
 import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
+import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 
 let authenticateUseCase: AuthenticateUseCase
 
 let userRepository: InMemoryUserRepository
 let fakeHasher: FakeHasher
+let fakeEncrypter: FakeEncrypter
 
 describe('Authenticate use case', () => {
   userRepository = new InMemoryUserRepository()
   fakeHasher = new FakeHasher()
+  fakeEncrypter = new FakeEncrypter()
 
-  authenticateUseCase = new AuthenticateUseCase(userRepository, fakeHasher)
+  authenticateUseCase = new AuthenticateUseCase(
+    userRepository,
+    fakeHasher,
+    fakeEncrypter,
+  )
 
   const cpf = generateCpf()
 
@@ -35,12 +42,15 @@ describe('Authenticate use case', () => {
     })
 
     expect(result.isRight()).toBe(true)
+    expect(result.value).toEqual({
+      accessToken: expect.any(String),
+    })
   })
 
   it('should not be able to authenticate an user when the credentials are incorrect', async () => {
     const result = await authenticateUseCase.execute({
       cpf,
-      password: '000000',
+      password: 'invalid-password',
     })
 
     expect(result.isLeft()).toBe(true)

@@ -1,9 +1,8 @@
 import { Either, left, right } from '@/core/errors/either'
-import { Courier } from '../../enterprise/entities/courier'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { UserRepository } from '../repositories/user-repository'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
-import { Administrator } from '../../enterprise/entities/administrator'
+import { Encrypter } from '../cryptography/encrypter'
 
 interface AuthenticateUseCaseRequest {
   cpf: string
@@ -13,7 +12,7 @@ interface AuthenticateUseCaseRequest {
 type AuthenticateUseCaseResponse = Either<
   WrongCredentialsError,
   {
-    user: Administrator | Courier
+    accessToken: string
   }
 >
 
@@ -21,6 +20,7 @@ export class AuthenticateUseCase {
   constructor(
     private userRepository: UserRepository,
     private hashComparer: HashComparer,
+    private encrypter: Encrypter,
   ) {}
 
   public async execute({
@@ -42,8 +42,12 @@ export class AuthenticateUseCase {
       return left(new WrongCredentialsError())
     }
 
+    const accessToken = await this.encrypter.encrypt({
+      sub: user.id.toString(),
+    })
+
     return right({
-      user,
+      accessToken,
     })
   }
 }

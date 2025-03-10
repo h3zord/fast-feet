@@ -24,6 +24,7 @@ describe('Create Courier use case', () => {
     })
 
     expect(result.isRight()).toBe(true)
+    expect(userRepository.items.length).toBe(1)
   })
 
   it('should not be able to create a courier when it already exists', async () => {
