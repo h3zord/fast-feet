@@ -17,4 +17,8 @@ export class InMemoryShipmentRepository implements ShipmentRepository {
 
     return shipment
   }
+
+  async fetchAll() {
+    return this.items
+  }
 }
