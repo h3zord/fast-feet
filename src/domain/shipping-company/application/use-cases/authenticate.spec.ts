@@ -1,5 +1,5 @@
 import { generate as generateCpf } from 'gerador-validador-cpf'
-import { makeAdmin } from 'test/factories/make-administrator'
+import { makeAdmininstrator } from 'test/factories/make-administrator'
 import { Cpf } from '../../enterprise/entities/value-objects/cpf'
 import { AuthenticateUseCase } from './authenticate'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
@@ -27,7 +27,7 @@ describe('Authenticate use case', () => {
   const cpf = generateCpf()
 
   beforeAll(async () => {
-    const admin = makeAdmin({
+    const admin = makeAdmininstrator({
       cpf: Cpf.create({ value: cpf }),
       password: await fakeHasher.hash('123456'),
     })

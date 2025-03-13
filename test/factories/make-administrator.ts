@@ -7,7 +7,7 @@ import {
   Administrator,
 } from '@/domain/shipping-company/enterprise/entities/administrator'
 
-export function makeAdmin(
+export function makeAdmininstrator(
   override: Partial<AdmininistratorProps> = {},
   id?: UniqueEntityId,
 ) {

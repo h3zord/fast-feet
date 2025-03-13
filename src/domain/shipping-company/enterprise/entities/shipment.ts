@@ -2,12 +2,12 @@ import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
-export interface OrderProps {
+export interface ShipmentProps {
   createdAt: Date
   updatedAt?: Date | null
 }
 
-export class Order extends Entity<OrderProps> {
+export class Shipment extends Entity<ShipmentProps> {
   get createdAt() {
     return this.props.createdAt
   }
@@ -16,8 +16,11 @@ export class Order extends Entity<OrderProps> {
     return this.props.updatedAt
   }
 
-  static create(props: Optional<OrderProps, 'createdAt'>, id?: UniqueEntityId) {
-    const order = new Order(
+  static create(
+    props: Optional<ShipmentProps, 'createdAt'> = {},
+    id?: UniqueEntityId,
+  ) {
+    const shipment = new Shipment(
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
@@ -25,6 +28,6 @@ export class Order extends Entity<OrderProps> {
       id,
     )
 
-    return order
+    return shipment
   }
 }
