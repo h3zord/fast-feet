@@ -1,27 +1,27 @@
 import { generate as generateCpf } from 'gerador-validador-cpf'
-import { makeAdmin } from 'test/factories/make-administrator'
 import { Cpf } from '../../enterprise/entities/value-objects/cpf'
-import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository'
 import { GetCourierByCpfUseCase } from './get-courier-by-cpf'
 import { CourierNotFoundError } from './errors/courier-not-found-error'
+import { InMemoryCourierRepository } from 'test/repositories/in-memory-courier-repository'
+import { makeCourier } from 'test/factories/make-courier'
 
 let getCourierByCpfUseCase: GetCourierByCpfUseCase
 
-let userRepository: InMemoryUserRepository
+let courierRepository: InMemoryCourierRepository
 
 describe('GetCourierByCpf use case', () => {
-  userRepository = new InMemoryUserRepository()
+  courierRepository = new InMemoryCourierRepository()
 
-  getCourierByCpfUseCase = new GetCourierByCpfUseCase(userRepository)
+  getCourierByCpfUseCase = new GetCourierByCpfUseCase(courierRepository)
 
   const cpf = generateCpf()
 
   beforeAll(async () => {
-    const admin = makeAdmin({
+    const courier = makeCourier({
       cpf: Cpf.create({ value: cpf }),
     })
 
-    userRepository.create(admin)
+    courierRepository.create(courier)
   })
 
   it('should be able to get a courier by cpf correctly', async () => {

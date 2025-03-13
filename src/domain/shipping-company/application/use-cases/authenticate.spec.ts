@@ -2,24 +2,24 @@ import { generate as generateCpf } from 'gerador-validador-cpf'
 import { makeAdmin } from 'test/factories/make-administrator'
 import { Cpf } from '../../enterprise/entities/value-objects/cpf'
 import { AuthenticateUseCase } from './authenticate'
-import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
+import { InMemoryWorkerRepository } from 'test/repositories/in-memory-worker-repository'
 
 let authenticateUseCase: AuthenticateUseCase
 
-let userRepository: InMemoryUserRepository
+let workerRepository: InMemoryWorkerRepository
 let fakeHasher: FakeHasher
 let fakeEncrypter: FakeEncrypter
 
 describe('Authenticate use case', () => {
-  userRepository = new InMemoryUserRepository()
+  workerRepository = new InMemoryWorkerRepository()
   fakeHasher = new FakeHasher()
   fakeEncrypter = new FakeEncrypter()
 
   authenticateUseCase = new AuthenticateUseCase(
-    userRepository,
+    workerRepository,
     fakeHasher,
     fakeEncrypter,
   )
@@ -32,7 +32,7 @@ describe('Authenticate use case', () => {
       password: await fakeHasher.hash('123456'),
     })
 
-    userRepository.create(admin)
+    workerRepository.items.push(admin)
   })
 
   it('should be able to authenticate an user correctly', async () => {

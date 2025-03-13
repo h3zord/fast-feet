@@ -1,34 +1,34 @@
 import { generate as generateCpf } from 'gerador-validador-cpf'
-import { InMemoryUserRepository } from 'test/repositories/in-memory-user-repository'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { CreateCourierUseCase } from './create-courier'
 import { CourierAlreadyExistsError } from './errors/courier-already-exists-error'
+import { InMemoryCourierRepository } from 'test/repositories/in-memory-courier-repository'
 
-let createcourierUseCase: CreateCourierUseCase
+let createCourierUseCase: CreateCourierUseCase
 
-let userRepository: InMemoryUserRepository
+let courierRepository: InMemoryCourierRepository
 let fakeHasher: FakeHasher
 
 describe('Create Courier use case', () => {
-  userRepository = new InMemoryUserRepository()
+  courierRepository = new InMemoryCourierRepository()
   fakeHasher = new FakeHasher()
 
-  createcourierUseCase = new CreateCourierUseCase(userRepository, fakeHasher)
+  createCourierUseCase = new CreateCourierUseCase(courierRepository, fakeHasher)
 
   const cpf = generateCpf()
 
   it('should be able to create a courier correctly', async () => {
-    const result = await createcourierUseCase.execute({
+    const result = await createCourierUseCase.execute({
       cpf,
       password: '123456',
     })
 
     expect(result.isRight()).toBe(true)
-    expect(userRepository.items.length).toBe(1)
+    expect(courierRepository.items).toHaveLength(1)
   })
 
   it('should not be able to create a courier when it already exists', async () => {
-    const result = await createcourierUseCase.execute({
+    const result = await createCourierUseCase.execute({
       cpf,
       password: '123456',
     })

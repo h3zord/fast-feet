@@ -1,8 +1,8 @@
 import { Either, left, right } from '@/core/errors/either'
 import { HashComparer } from '../cryptography/hash-comparer'
-import { UserRepository } from '../repositories/user-repository'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
 import { Encrypter } from '../cryptography/encrypter'
+import { WorkerRepository } from '../repositories/worker-repository'
 
 interface AuthenticateUseCaseRequest {
   cpf: string
@@ -18,7 +18,7 @@ type AuthenticateUseCaseResponse = Either<
 
 export class AuthenticateUseCase {
   constructor(
-    private userRepository: UserRepository,
+    private workerRepository: WorkerRepository,
     private hashComparer: HashComparer,
     private encrypter: Encrypter,
   ) {}
@@ -27,15 +27,15 @@ export class AuthenticateUseCase {
     cpf,
     password,
   }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
-    const user = await this.userRepository.findByCpf(cpf)
+    const worker = await this.workerRepository.findByCpf(cpf)
 
-    if (!user) {
+    if (!worker) {
       return left(new WrongCredentialsError())
     }
 
     const isPasswordValid = await this.hashComparer.compare(
       password,
-      user.password,
+      worker.password,
     )
 
     if (!isPasswordValid) {
@@ -43,7 +43,8 @@ export class AuthenticateUseCase {
     }
 
     const accessToken = await this.encrypter.encrypt({
-      sub: user.id.toString(),
+      sub: worker.id.toString(),
+      role: worker.getRole(),
     })
 
     return right({

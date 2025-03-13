@@ -1,9 +1,9 @@
 import { Either, left, right } from '@/core/errors/either'
 import { Courier } from '../../enterprise/entities/courier'
-import { UserRepository } from '../repositories/user-repository'
 import { CourierAlreadyExistsError } from './errors/courier-already-exists-error'
 import { Cpf } from '../../enterprise/entities/value-objects/cpf'
 import { HashGenerator } from '../cryptography/hash-generator'
+import { CourierRepository } from '../repositories/courier-repository'
 
 interface CreateCourierUseCaseRequest {
   cpf: string
@@ -19,7 +19,7 @@ type CreateCourierUseCaseResponse = Either<
 
 export class CreateCourierUseCase {
   constructor(
-    private userRepository: UserRepository,
+    private courierRepository: CourierRepository,
     private hashGenerator: HashGenerator,
   ) {}
 
@@ -27,7 +27,7 @@ export class CreateCourierUseCase {
     cpf,
     password,
   }: CreateCourierUseCaseRequest): Promise<CreateCourierUseCaseResponse> {
-    const courierExists = await this.userRepository.findByCpf(cpf)
+    const courierExists = await this.courierRepository.findByCpf(cpf)
 
     if (courierExists) {
       return left(new CourierAlreadyExistsError(cpf))
@@ -40,7 +40,7 @@ export class CreateCourierUseCase {
       password: hashedPassword,
     })
 
-    await this.userRepository.create(courier)
+    await this.courierRepository.create(courier)
 
     return right({
       courier,
