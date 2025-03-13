@@ -21,4 +21,20 @@ export class InMemoryCourierRepository implements CourierRepository {
   async fetchAll() {
     return this.items
   }
+
+  async save(courier: Courier) {
+    const courierIndex = this.items.findIndex(
+      (item) => item.cpf.toString() === courier.cpf.toString(),
+    )
+
+    this.items[courierIndex] = courier
+  }
+
+  async delete(courier: Courier) {
+    const courierIndex = this.items.findIndex(
+      (item) => item.cpf.toString() === courier.cpf.toString(),
+    )
+
+    this.items.splice(courierIndex, 1)
+  }
 }
