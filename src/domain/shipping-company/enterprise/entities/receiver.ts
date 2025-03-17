@@ -8,6 +8,14 @@ export interface ReceiverProps {
 }
 
 export class Receiver extends Entity<ReceiverProps> {
+  get createdAt() {
+    return this.props.createdAt
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt
+  }
+
   static create(
     props: Optional<ReceiverProps, 'createdAt'>,
     id?: UniqueEntityId,

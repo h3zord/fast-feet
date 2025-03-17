@@ -31,6 +31,7 @@ describe('Delete courier use case', () => {
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toBeNull()
+    expect(courierRepository.items).toHaveLength(0)
   })
 
   it('should not be able to delete a courier by cpf when it does not exist', async () => {
