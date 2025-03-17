@@ -11,6 +11,10 @@ export interface ReceiverProps {
 }
 
 export class Receiver extends Entity<ReceiverProps> {
+  private touch() {
+    this.props.updatedAt = new Date()
+  }
+
   get cpf() {
     return this.props.cpf
   }
@@ -21,6 +25,8 @@ export class Receiver extends Entity<ReceiverProps> {
 
   set address(address: string) {
     this.props.address = address
+
+    this.touch()
   }
 
   get createdAt() {
