@@ -8,8 +8,8 @@ export class InMemoryReceiverRepository implements ReceiverRepository {
     this.items.push(receiver)
   }
 
-  async findById(id: string) {
-    const receiver = this.items.find((item) => item.id.toString() === id)
+  async findByCpf(cpf: string) {
+    const receiver = this.items.find((item) => item.cpf.toString() === cpf)
 
     if (!receiver) {
       return null
