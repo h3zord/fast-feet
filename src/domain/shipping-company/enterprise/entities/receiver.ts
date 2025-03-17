@@ -3,6 +3,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
 export interface ReceiverProps {
+  address: string
   createdAt: Date
   updatedAt?: Date | null
 }
